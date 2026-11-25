@@ -6,19 +6,19 @@ push go live.
 
 ## One-time VM setup
 
-Run on the VM with sudo:
+Run on the VM as a user with sudo (for example `vyuh-user`):
 
 ```bash
-apt update && apt install -y git python3 python3-venv
+sudo apt update && sudo apt install -y git python3 python3-venv
 ```
 
 Then connect the repo in VyuhStack (settings below) and click **Verify**, which
 clones it into `/opt/app`. After that, install the service:
 
 ```bash
-cp /opt/app/deploy/app.service /etc/systemd/system/app.service
-systemctl daemon-reload
-systemctl enable app
+sudo cp /opt/app/deploy/app.service /etc/systemd/system/app.service
+sudo systemctl daemon-reload
+sudo systemctl enable app
 ```
 
 The first deploy creates the virtualenv, installs the dependencies and starts it.
@@ -40,8 +40,8 @@ The virtualenv lives in the repo folder and is git-ignored, so deploys keep it
 and only install what changed.
 
 `sudo -n` needs passwordless sudo for `vyuh-user`. VyuhStack VMs have it by
-default; check with `runuser -l vyuh-user -c 'sudo -n true && echo ok'`.
-Otherwise add a rule with `visudo -f /etc/sudoers.d/vyuhstack-deploy`:
+default; check with `sudo runuser -l vyuh-user -c 'sudo -n true && echo ok'`.
+Otherwise add a rule with `sudo visudo -f /etc/sudoers.d/vyuhstack-deploy`:
 
 ```
 vyuh-user ALL=(root) NOPASSWD: /usr/bin/systemctl restart app
